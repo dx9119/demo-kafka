@@ -1,5 +1,7 @@
-package com.ukhanov.demo.kafka;
+package com.ukhanov.demo.kafka.controller;
 
+import com.ukhanov.demo.kafka.model.User;
+import com.ukhanov.demo.kafka.service.KafkaProducer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +20,11 @@ public class KafkaController {
 
     @PostMapping("/send")
     public ResponseEntity<String> send (@RequestParam String message) {
-        producer.sendMessage(message);
+        producer.sendMessageFireAndForget(message);
+
+        User user = new User("User01");
+        producer.sendJsonMessageWithKeyAsync(user);
+
         return ResponseEntity.ok("Отправлено:"+message);
     }
 }
